@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDatetime from "react-datetime";
 
 // reactstrap components
 import {
@@ -10,21 +11,47 @@ import {
   Input,
   Container,
   Row,
-  Col
+  Col,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Button
+  
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 
 class AdminDocs extends React.Component {
   state = {
-    date: new Date()
+    cin:'', 
+    numInscrit:'',
+    firstName:'',
+    lastName:'',
+    phoneNumber:'',
+    date: new Date(),
+    addressNaissance :'',
+    niveau :Number,
+    td:Number,
+    tp:Number,
+    selectedOption:'certificat de départ',
+    autre:'',
   };
+  cinOnchange=event=> this.setState({cin:event.target.value});
+  numInscritOnChange=event=> this.setState({numInscrit:event.target.value});
+  firstNameOnChange=event=> this.setState({firstName:event.target.value});
+  lastNameOnchange=event=> this.setState({lastName:event.target.value});
+  phoneNumberOnchange=event=> this.setState({phoneNumber:event.target.value});
+  dateOnChange = date => this.setState({ date });
+  addressNaissanceOnchange=event=> this.setState({addressNaissance:event.target.value});
+  niveauOnchange=event=> this.setState({niveau:event.target.value});
+  tdOnchange=event=> this.setState({td:event.target.value});
+  tpOnchange=event=> this.setState({tp:event.target.value});
+  handleOptionChange=event=> this.setState({selectedOption:event.target.value});
+  autreOnchange=event=> this.setState({autre:event.target.value});
 
-  onChange = date => this.setState({ date });
 
   render() {
+    console.log(this.state);
     return (
       <>
         <UserHeader />
@@ -42,7 +69,7 @@ class AdminDocs extends React.Component {
                 </Row>
               </CardHeader>
               <CardBody>
-                <Form>
+                <Form onSubmit={this.handleSubmit}>
                   <h6 className="heading-small text-muted mb-4">
                     User information
                   </h6>
@@ -59,6 +86,8 @@ class AdminDocs extends React.Component {
                             id="CIN"
                             placeholder="CIN"
                             type="text"
+                            value={this.state.cin}
+                            onChange={this.cinOnchange}
                           />
                         </FormGroup>
                       </Col>
@@ -75,6 +104,8 @@ class AdminDocs extends React.Component {
                             id="Num-inscri"
                             placeholder="12345678"
                             type="text"
+                            value={this.state.numInscrit}
+                            onChange={this.numInscritOnChange}
                           />
                         </FormGroup>
                       </Col>
@@ -93,6 +124,8 @@ class AdminDocs extends React.Component {
                             id="input-first-name"
                             placeholder="First name"
                             type="text"
+                            value={this.state.firstName}
+                            onChange={this.firstNameOnChange}
                           />
                         </FormGroup>
                       </Col>
@@ -109,6 +142,26 @@ class AdminDocs extends React.Component {
                             id="input-last-name"
                             placeholder="Last name"
                             type="text"
+                            value={this.state.lastName}
+                            onChange={this.lastNameOnchange}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-Phone"
+                          >
+                            Phone Number
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-Phone"
+                            placeholder="Phone"
+                            type="number"
+                            value={this.state.phoneNumber}
+                            onChange={this.phoneNumberOnchange}
                           />
                         </FormGroup>
                       </Col>
@@ -117,29 +170,25 @@ class AdminDocs extends React.Component {
                   <hr className="my-4" />
                   {/* Address */}
                   <h6 className="heading-small text-muted mb-4">
-                    Contact information
+                    date de naissance
                   </h6>
-                  <div>
-                  <div class="row">
-                     <div class="col-sm pt-7">
-                     <Input
-                            className="form-control-alternative"
-                            id="input-last-name"
-                            placeholder="Last name"
-                            type="text"
-                            value={this.state.date}
-                          />
-                    </div>
-                   
-                    <div class="col-sm">
-                    <Calendar
-                      onChange={this.onChange}
-                      value={this.state.date}
-                    />
-                   
-                      </div>
-                    </div>
-                  </div>
+                  
+                  <FormGroup>
+          <InputGroup className="input-group-alternative">
+            <InputGroupAddon addonType="prepend">
+              <InputGroupText>
+                <i className="ni ni-calendar-grid-58" />
+              </InputGroupText>
+            </InputGroupAddon>
+            <ReactDatetime
+              inputProps={{
+                placeholder: "Date Picker Here"
+              }}
+              timeFormat={false}
+            />
+          </InputGroup>
+        </FormGroup>
+                 
                   <div className="pl-lg-4">
                     <Row>
                       <Col md="12">
@@ -148,7 +197,7 @@ class AdminDocs extends React.Component {
                             className="form-control-label"
                             htmlFor="input-address"
                           >
-                            Address
+                            Address de naissance
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -156,6 +205,8 @@ class AdminDocs extends React.Component {
                             id="input-address"
                             placeholder="Home Address"
                             type="text"
+                            value={this.state.addressNaissance}
+                            onChange={this.addressNaissanceOnchange}
                           />
                         </FormGroup>
                       </Col>
@@ -167,14 +218,16 @@ class AdminDocs extends React.Component {
                             className="form-control-label"
                             htmlFor="input-city"
                           >
-                            City
+                            Niveau
                           </label>
                           <Input
                             className="form-control-alternative"
                             defaultValue="New York"
                             id="input-city"
-                            placeholder="City"
+                            placeholder="1ére"
                             type="text"
+                            value={this.state.niveau}
+                            onChange={this.niveauOnchange}
                           />
                         </FormGroup>
                       </Col>
@@ -184,14 +237,16 @@ class AdminDocs extends React.Component {
                             className="form-control-label"
                             htmlFor="input-country"
                           >
-                            Country
+                            TD
                           </label>
                           <Input
                             className="form-control-alternative"
                             defaultValue="United States"
                             id="input-country"
-                            placeholder="Country"
+                            placeholder="TD1"
                             type="text"
+                            value={this.state.td}
+                            onChange={this.tdOnchange}
                           />
                         </FormGroup>
                       </Col>
@@ -201,34 +256,84 @@ class AdminDocs extends React.Component {
                             className="form-control-label"
                             htmlFor="input-country"
                           >
-                            Postal code
+                            TP
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-postal-code"
-                            placeholder="Postal code"
-                            type="number"
+                            placeholder="TP1"
+                            type="text"
+                            value={this.state.tp}
+                            onChange={this.tpOnchange}
                           />
                         </FormGroup>
                       </Col>
                     </Row>
                   </div>
                   <hr className="my-4" />
+      {/* radio buttons */}
+         <div> 
+        <div className="custom-control custom-radio mb-3">
+          <input
+            className="custom-control-input"
+            id="customRadio5"
+            name="custom-radio-2"
+            type="radio"
+            value="attestation de présence"
+            onChange={this.handleOptionChange}
+          />
+          <label className="custom-control-label" htmlFor="customRadio5">
+            attestation de présence
+          </label>
+        </div>
+        <div className="custom-control custom-radio mb-3">
+          <input
+            className="custom-control-input"
+            defaultChecked
+            id="customRadio6"
+            name="custom-radio-2"
+            type="radio" 
+            value="certificat de départ"
+            onChange={this.handleOptionChange}
+          />
+          <label className="custom-control-label" htmlFor="customRadio6">
+            certificat de départ 
+          </label>
+        </div>
+        <div className="custom-control custom-radio mb-3">
+          <input
+            className="custom-control-input"
+            id="customRadio7"
+            name="custom-radio-2"
+            type="radio"
+            value="retrait d'inscription"
+            onChange={this.handleOptionChange}
+          />
+          <label className="custom-control-label" htmlFor="customRadio7">
+            retrait d'inscription
+          </label>
+        </div>
+        </div>
+
                   {/* Description */}
                   <h6 className="heading-small text-muted mb-4">About me</h6>
                   <div className="pl-lg-4">
                     <FormGroup>
-                      <label>About Me</label>
+                      <label>Autre Document</label>
                       <Input
                         className="form-control-alternative"
-                        placeholder="A few words about you ..."
+                        placeholder="example d'autre document ..."
                         rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
+                        defaultValue=""
                         type="textarea"
+                        value={this.state.autre}
+                            onChange={this.autreOnchange}
                       />
                     </FormGroup>
                   </div>
+                  <Button className="my-4" color="primary" type="submit">
+                    Conformer
+                  </Button>
                 </Form>
               </CardBody>
             </Card>
