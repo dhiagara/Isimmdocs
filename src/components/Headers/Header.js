@@ -24,8 +24,15 @@ class Header extends React.Component {
   render() {
     
     let items =[]
-    let CardTitles =["Une demande d'extraction de documents administratifs", 
-    "gara","mohamed"]
+    let CardTitles =["demande extraction documents admin", 
+    "Demande de report de démarcation",
+    "Demande de voir une épreuve",
+    "Demande de changement de filiere",
+    "Fiche d'information stage",
+    "Letter d'affectation",
+    "Proposition de sujet Master Recherche",
+    "lettre d'appui (étudient satgiaire)"]
+    
     CardTitles.forEach(element =>items.push(
       <Col lg="6" xl="3">
       <Cards name={element} ></Cards>

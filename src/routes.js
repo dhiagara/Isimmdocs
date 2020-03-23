@@ -21,8 +21,11 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
-import Gara from "views/examples/Forms/Gara";
-import AdminDocs from "views/examples/Forms/AdminDocs";
+
+import Form1 from "views/examples/Forms/Form1";
+import Form2 from "views/examples/Forms/Form2";
+import Form3 from "views/examples/Forms/Form3";
+
 
 var routes = [
   {
@@ -48,17 +51,25 @@ var routes = [
   },
 
   {
-    path: "/user-profile/Une demande d'extraction de documents administratifs",
+    path: "/user-profile/demande extraction documents admin",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
-    component:AdminDocs,
+    component:Form1,
     layout: "/admin"
   },
   {
-    path: "/user-profile/Gara",
+    path: "/user-profile/Demande de report de démarcation",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
-    component:Gara,
+    component:Form2,
+    layout: "/admin"
+  },
+  
+  {
+    path: "/user-profile/Demande de voir une épreuve",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component:Form3,
     layout: "/admin"
   },
   {
