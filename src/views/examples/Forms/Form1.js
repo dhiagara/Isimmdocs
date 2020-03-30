@@ -73,9 +73,9 @@ class Form1 extends React.Component {
     phoneNumber: "",
     date: new Date(),
     addressNaissance: "",
-    niveau: Number,
-    td: Number,
-    tp: Number,
+    niveau: "",
+    td: "",
+    tp: "",
     selectedOption: "certificat de départ",
     autre: ""
   };

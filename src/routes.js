@@ -22,9 +22,13 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 
+
 import Form1 from "views/examples/Forms/Form1";
 import Form2 from "views/examples/Forms/Form2";
 import Form3 from "views/examples/Forms/Form3";
+import Form4 from "views/examples/Forms/Form4";
+import Form5 from "views/examples/Forms/Form5"
+import Form6 from "views/examples/Forms/Form6";
 
 
 var routes = [
@@ -63,13 +67,33 @@ var routes = [
     icon: "ni ni-single-02 text-yellow",
     component:Form2,
     layout: "/admin"
-  },
-  
+  }, 
   {
     path: "/user-profile/Demande de voir une épreuve",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component:Form3,
+    layout: "/admin"
+  },
+  {
+    path: "/user-profile/Demande de changement de filiere",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component:Form4,
+    layout: "/admin"
+  },
+  {
+    path: "/user-profile/Fiche d'information stage",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component:Form5,
+    layout: "/admin"
+  },
+  {
+    path: "/user-profile/Letter d'affectation",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component:Form6,
     layout: "/admin"
   },
   {

@@ -4,6 +4,9 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Error from "./Error";
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 // reactstrap components
 import {
   Card,
@@ -35,7 +38,7 @@ const validationShema = Yup.object().shape({
     .min(8, "Too Short!")
     .max(8, "Too Long!")
     .required("ne peut pas etre vide"),
-
+ 
   firstName: Yup.string()
     .required("ne peut pas etre vide"),
 
@@ -58,9 +61,13 @@ const validationShema = Yup.object().shape({
   .typeError("il faut etre une numéro")
   .required("ne peut pas etre vide"),
   
-  gov:Yup.number()
+ 
+  phoneNumber :Yup.string()
+
   .typeError("il faut etre une numéro")
-  .required("ne peut pas etre vide"),
+    .min (8, "Too Short!")
+    .max (8, "Too Long!")
+    .required("ne peut pas etre vide"),
   
   adress:Yup.string()
   .required("ne peut pas etre vide"),
@@ -72,34 +79,35 @@ const validationShema = Yup.object().shape({
   .required("ne peut pas etre vide"), 
   annebac:Yup.string()
   .required("ne peut pas etre vide"),  
-  feliere:Yup.string()
+  filiere:Yup.string()
   .required("ne peut pas etre vide"),  
-  session:Yup.string()
+  filiereRequise:Yup.string()
   .required("ne peut pas etre vide"), 
+  institue:Yup.string()
+  .required("ne peut pas etre vide"),
+  punition:Yup.string()
+  .required("ne peut pas etre vide"),
 }); 
 
 class Form2 extends React.Component {
   
   state = {
     cin: "",
-    numPass: "",
     firstName: "",
     lastName: "",
     date: new Date(),
     villeNaiss:"" ,
-    gov: "",
+    phoneNumber: "",
     address:"",
     villeResid:"",
     codePostal: "",
     annebac:"",
-    feliere:"",
-    session:"",
-   
-    selectedOption1: "Sain",
-    selectedOption2: "Oui",
-    selectedOption3: "Oui",
-    
-
+    filiere:"",
+    filiereRequise:"",
+    Institut:"",
+    punition:"",
+    selectedOption: "1er Année",
+    selectedOption1: "non",
   };
   cinOnchange = event => this.setState({ cin: event.target.value });
   numPassOnChange = event =>this.setState({ numPasse: event.target.value });
@@ -112,11 +120,10 @@ class Form2 extends React.Component {
   villeResidOnchange = event=> this.setState({villeResid :event.target.value });
   codePostalResidOnchange = event=> this.setState({codePostal :event.target.value });
   annebacOnchange = event=> this.setState({annebac :event.target.value });
-  feliereOnchange = event=> this.setState({feliere :event.target.value });
+  filiereOnchange = event=> this.setState({filiere :event.target.value });
   sessionOnchange = event=> this.setState({session :event.target.value });
+  handleOptionChange = event => this.setState({ selectedOption: event.target.value });
   handleOption1Change = event => this.setState({ selectedOption1: event.target.value });
-  handleOption2Change = event => this.setState({ selectedOption2: event.target.value });
-  handleOption3Change = event => this.setState({ selectedOption3: event.target.value });
   render() {
     //console.log(this.state);
 
@@ -131,7 +138,7 @@ class Form2 extends React.Component {
                 <Row className="align-items-center">
                   <Col xs="8">
                     <h3 className="mb-0">
-                    Demande de report de démarcation
+                    Demande de changement de filiere
                     </h3>
                   </Col>
                 </Row>
@@ -139,7 +146,7 @@ class Form2 extends React.Component {
               <CardBody>
                 <Formik
                   initialValues={{ cin: "", numPass: "",firstName:"",lastName:"",codePostal:"",date:"",
-                villeNaiss:"",gov:"" ,villeResid:"",address:"",annebac:"", feliere:"",  session:"",}}
+                villeNaiss:"", phoneNumber: "" ,villeResid:"",address:"",annebac:"", filiere:"",filiereRequise:"",institue:"", punition:""}}
                   validationSchema={validationShema}
                   // onSubmit={(values, { setSubmitting }) => {
                   //   setTimeout(() => {
@@ -167,42 +174,7 @@ class Form2 extends React.Component {
                       </h6>
 
                       <div className="pl-lg-4">
-                        <Row>
-                           <label className=" form-control-label col-4">Demande de report de démarcation</label>
-                        <div className="custom-control custom-radio mb-3 col-4">
-                            <input
-                              className="custom-control-input"
-                              id="customRadio5"
-                              name="custom-radio-2"
-                              type="radio"
-                              value="attestation de présence"
-                              onChange={this.handleOption1Change}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="customRadio5"
-                            >
-                              Sain
-                            </label>
-                          </div>
-                          <div className="custom-control custom-radio mb-3 col-4">
-                            <input
-                              className="custom-control-input"
-                              defaultChecked
-                              id="customRadio6"
-                              name="custom-radio-2"
-                              type="radio"
-                              value="certificat de départ"
-                              onChange={this.handleOption1Change}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="customRadio6"
-                            >
-                              personnelles
-                            </label>
-                          </div>
-                        </Row>  
+                     
                         <Row>
                           <Col lg="6">
                             <FormGroup>
@@ -228,31 +200,6 @@ class Form2 extends React.Component {
                                 touched={touched.cin}
                                 message={errors.cin}
                               /> </small></p>
-                            </FormGroup>
-                          </Col>
-                          <Col lg="6">
-                            <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="Num-passport"
-                              >
-                                Num Passport
-                              </label>
-                              <Input
-                                id="numPass"
-                                placeholder="12345678"
-                                type="text"
-                                value={values.numPass}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={
-                                touched.numPass && errors.numPass ? "has-error" : null
-                                }
-                              />
-                             <p className="text-danger"><small> <Error
-                                touched={touched.numPass}
-                                message={errors.numPass}
-                              /></small></p>
                             </FormGroup>
                           </Col>
                         </Row>
@@ -317,7 +264,7 @@ class Form2 extends React.Component {
                           </Row>
 
                           <Row>
-                            <Col lg="4">
+                            <Col lg="6">
                             <label
                                 className="form-control-label"
                                 htmlFor="date-naissance"
@@ -349,7 +296,7 @@ class Form2 extends React.Component {
                         </FormGroup>
                                
                             </Col>
-                            <Col lg="4">
+                            <Col lg="6">
                               <FormGroup>
                                 <label
                                   className="form-control-label"
@@ -378,34 +325,7 @@ class Form2 extends React.Component {
                                 </p>
                               </FormGroup>
                             </Col>
-                            <Col lg="4">
-                              <FormGroup>
-                                <label
-                                  className="form-control-label"
-                                  htmlFor="input-country"
-                                >
-                                  Governement
-                                </label>
-                                <Input
-                                  className="form-control-alternative"
-                                  id="gov"
-                                  placeholder="votre governement de naissance"
-                                  type="text"
-                                  value={this.gov}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  className={
-                                    touched.gov && errors.gov ? "has-error" : null
-                                    }
-                                />
-                                 <p className="text-danger"> <small>
-                                 <Error
-                                  touched={touched.gov}
-                                  message={errors.gov}
-                                /></small>
-                                </p>
-                              </FormGroup>
-                            </Col>
+                            
                           </Row>
 
                           <Row>
@@ -426,13 +346,13 @@ class Form2 extends React.Component {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 className={
-                                touched.adress && errors.adress? "has-error" : null
+                                touched.address && errors.address? "has-error" : null
                                 }
                               />
                                <p className="text-danger"> <small>
                                <Error
-                                touched={touched.adress}
-                                message={errors.adress}
+                                touched={touched.address}
+                                message={errors.address}
                               />
                              </small> </p>
                             </FormGroup>
@@ -483,7 +403,7 @@ class Form2 extends React.Component {
                                 id="codePostal"
                                 placeholder="code postal"
                                 type="text"
-                                value={this.phoneNumber}
+                                value={this.codePostal}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 className={
@@ -494,6 +414,34 @@ class Form2 extends React.Component {
                                  <Error
                                   touched={touched.codePostal}
                                   message={errors.codePostal}
+                                /></small>
+                                </p>
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-Phone"
+                              >
+                                Phone Number
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="phoneNumber"
+                                placeholder="Phone"
+                                type="text"
+                                value={this.phoneNumber}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                className={
+                                  touched.phoneNumber && errors.phoneNumber ? "has-error" : null
+                                  }
+                                />
+                                 <p className="text-danger"> <small>
+                                 <Error
+                                  touched={touched.phoneNumber}
+                                  message={errors.phoneNumber}
                                 /></small>
                                 </p>
                             </FormGroup>
@@ -509,7 +457,7 @@ class Form2 extends React.Component {
                         <div className="pl-lg-4">
                          
                           <Row>
-                            <Col lg="4">
+                            <Col lg="6">
                               <FormGroup>
                                 <label
                                   className="form-control-label"
@@ -538,7 +486,7 @@ class Form2 extends React.Component {
                                 </p>
                               </FormGroup>
                             </Col>
-                            <Col lg="4">
+                            <Col lg="6">
                               <FormGroup>
                                 <label
                                   className="form-control-label"
@@ -549,52 +497,25 @@ class Form2 extends React.Component {
                                 <Input
                                   className="form-control-alternative"
                                   
-                                  id="feliere"
+                                  id="filiere"
                                   placeholder="Féliere"
                                   type="text"
-                                  value={this.feliere}
+                                  value={this.filiere}
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   className={
-                                    touched.feliere && errors.feliere ? "has-error" : null
+                                    touched.filiere && errors.filiere ? "has-error" : null
                                     }
                                 />
                                  <p className="text-danger"> <small>
                                  <Error
-                                  touched={touched.feliere}
-                                  message={errors.feliere}
+                                  touched={touched.filiere}
+                                  message={errors.filiere}
                                 /></small>
                                 </p>
                               </FormGroup>
                             </Col>
-                            <Col lg="4">
-                              <FormGroup>
-                                <label
-                                  className="form-control-label"
-                                  htmlFor="input-country"
-                                >
-                                  Session
-                                </label>
-                                <Input
-                                  className="form-control-alternative"
-                                  id="session"
-                                  placeholder="session"
-                                  type="text"
-                                  value={this.session}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  className={
-                                    touched.session && errors.session ? "has-error" : null
-                                    }
-                                />
-                                 <p className="text-danger"> <small>
-                                 <Error
-                                  touched={touched.session}
-                                  message={errors.session}
-                                /></small>
-                                </p>
-                              </FormGroup>
-                            </Col>
+                           
                           </Row>
                         </div>
                         <hr className="my-4" />
@@ -606,7 +527,7 @@ class Form2 extends React.Component {
                         <thead className="thead-light">
                             <tr>
                             <th scope="col">Année univer</th>
-                            <th scope="col">institue</th>
+                            <th scope="col">institue </th>
                             <th scope="col">Année scolaire</th>
                             <th scope="col">filiaire</th>
                             <th scope="col">Resultat</th>
@@ -617,7 +538,6 @@ class Form2 extends React.Component {
                             <th scope="row">
                             <FormGroup>
                                 <Input
-                                  id="annetab"
                                   className="form-control-alternative"
                                   placeholder="année"
                                   type="text"
@@ -630,7 +550,6 @@ class Form2 extends React.Component {
                             <td>
                            <FormGroup>
                                 <Input
-                                  
                                   className="form-control-alternative"
                                   placeholder="institue"
                                   type="text"
@@ -810,58 +729,117 @@ class Form2 extends React.Component {
                         </tbody>
                         </Table>
 
+                        <hr className="my-4" />
                        
-                        {/* </Form> */}
                         <Row>
-                           <label className=" form-control-label col-4">Auparavant utilisé pour des raisons personnelles</label>
+                           <label className=" form-control-label col-4">niveau demandé</label>
                         <div className="custom-control custom-radio mb-3 col-4">
                             <input
                               className="custom-control-input"
-                              id="customRadio1"
-                              name="custom-radio-3"
+                              id="customRadio5"
+                              name="custom-radio-2"
                               type="radio"
                               value="attestation de présence"
-                              onChange={this.handleOption2Change}
+                              onChange={this.handleOptionChange}
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="customRadio1"
+                              htmlFor="customRadio5"
                             >
-                              Oui
+                              1er Année
                             </label>
                           </div>
                           <div className="custom-control custom-radio mb-3 col-4">
                             <input
                               className="custom-control-input"
                               defaultChecked
-                              id="customRadio2"
-                              name="custom-radio-3"
+                              id="customRadio6"
+                              name="custom-radio-2"
                               type="radio"
                               value="certificat de départ"
-                              onChange={this.handleOption2Change}
+                              onChange={this.handleOptionChange}
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="customRadio2"
+                              htmlFor="customRadio6"
                             >
-                              Non
+                              2eme Année
                             </label>
                           </div>
                         </Row>  
-                        <Row>
-                           <label className=" form-control-label col-4">Auparavant utilisé pour des raisons Sain</label>
+
+                            <Row>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-first-name"
+                              >
+                                Filière requise
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="filiereRequise"
+                                placeholder="Filière requise"
+                                type="text"
+                                value={this.filiereRequise}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                className={
+                                touched.firstName && errors.filiereRequise ? "has-error" : null
+                                }
+                              />
+                              <p className="text-danger"> <small>
+                               <Error
+                                touched={touched.filiereRequise}
+                                message={errors.filiereRequise}
+                              />
+                              </small></p>
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-last-name"
+                              >
+                                Institut demandé
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="institue"
+                                placeholder="institue"
+                                type="text"
+                                value={this.institue}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                className={
+                                touched.institue && errors.institue ? "has-error" : null
+                                }
+                              />
+                               <p className="text-danger"> <small>
+                               <Error
+                                touched={touched.institue}
+                                message={errors.institue}
+                              />
+                             </small> </p>
+                            </FormGroup>
+                          </Col>
+                          </Row>
+                          <Row>
+                           <label className=" form-control-label col-4">Avez-vous déjà fait l'objet de sanctions disciplinaires?</label>
                         <div className="custom-control custom-radio mb-3 col-4">
                             <input
                               className="custom-control-input"
-                              id="customRadio3"
-                              name="custom-radio-4"
+                              id="customRadio7"
+                              name="custom-radio-3"
                               type="radio"
                               value="attestation de présence"
-                              onChange={this.handleOption3Change}
+                              onChange={this.handleOption1Change}
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="customRadio3"
+                              htmlFor="customRadio7"
                             >
                               oui
                             </label>
@@ -870,20 +848,53 @@ class Form2 extends React.Component {
                             <input
                               className="custom-control-input"
                               defaultChecked
-                              id="customRadio4"
-                              name="custom-radio-4"
+                              id="customRadio8"
+                              name="custom-radio-3"
                               type="radio"
                               value="certificat de départ"
-                              onChange={this.handleOption3Change}
+                              onChange={this.handleOption1Change}
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="customRadio4"
+                              htmlFor="customRadio8"
                             >
                               non
                             </label>
                           </div>
                         </Row>  
+                        <Row>
+                        <Col >
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-last-name"
+                              >
+                                Type de punition
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="punition"
+                                placeholder=" Type de punition"
+                                type="text"
+                                value={this.punition}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                className={
+                                touched.punition && errors.punition ? "has-error" : null
+                                }
+                              />
+                               <p className="text-danger"> <small>
+                               <Error
+                                touched={touched.punition}
+                                message={errors.punition}
+                              />
+                             </small> </p>
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        {/* </Form> */}
+
+                      
                       </div>
                       
                       <Button className="my-4" color="primary" type="submit">

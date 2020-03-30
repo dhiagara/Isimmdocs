@@ -48,7 +48,7 @@ const validationShema = Yup.object().shape({
   .required("ne peut pas etre vide"),
 
 
-  phoneNumber :Yup.number()
+  phoneNumber :Yup.string()
 
   .typeError("il faut etre une numéro")
     .min (8, "Too Short!")
@@ -98,7 +98,7 @@ class Form3 extends React.Component {
                 <Row className="align-items-center">
                   <Col xs="8">
                     <h3 className="mb-0">
-                    Demande de report de démarcation
+                    Demande de voir une épreuve
                     </h3>
                   </Col>
                 </Row>
@@ -107,12 +107,12 @@ class Form3 extends React.Component {
                 <Formik
                   initialValues={{ cin: "",niveau:"",firstName:"",lastName:"",phoneNumber: "", matiere:"",enseignant:"", epreuve:""}}
                   validationSchema={validationShema}
-                  // onSubmit={(values, { setSubmitting }) => {
-                  //   setTimeout(() => {
-                  //     alert(JSON.stringify(values, null, 2));
-                  //     setSubmitting(false);
-                  //   }, 400);
-                  // }}
+                  onSubmit={(values, { setSubmitting }) => {
+                    setTimeout(() => {
+                      alert(JSON.stringify(values, null, 2));
+                      setSubmitting(false);
+                    }, 400);
+                  }}
                 >
                   {({
                     values,
@@ -312,7 +312,7 @@ class Form3 extends React.Component {
                                 <Input
                                   className="form-control-alternative"
                                   id="epreuve"
-                                  placeholder="epreuve"
+                                  placeholder="exam\ ds\ tp"
                                   type="text"
                                   value={this.epreuve}
                                   onChange={handleChange}
@@ -358,13 +358,10 @@ class Form3 extends React.Component {
                             </FormGroup>
                           </Col>
                           </Row>
-                        
-
-                       
                       </div>
                       
                       <Button className="my-4" color="primary" type="submit">
-                          Conformer
+                          Confirmer
                         </Button>
                     </form>
                   )}
