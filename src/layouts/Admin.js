@@ -64,7 +64,7 @@ class Admin extends React.Component {
       <>
         <Sidebar
           {...this.props}
-          routes={[routes[0]]}
+          routes={routes.slice(0,3)}
           logo={{
             innerLink: "/admin/index",
             imgSrc: require("assets/img/brand/argon-react.png"),

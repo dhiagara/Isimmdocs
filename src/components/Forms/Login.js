@@ -16,6 +16,9 @@
 
 */
 import React from "react";
+import * as Yup from "yup";
+import Error from "./Error";
+import axios from 'axios';
 
 // reactstrap components
 import {
@@ -32,8 +35,21 @@ import {
   Row,
   Col
 } from "reactstrap";
+import { Formik } from "formik";
+const validationShema = Yup.object().shape({
+  login: Yup.string()
+  .required("ne pas eter vide"),
+  password: Yup.string()
+  .required("ne pas eter vide"),
+})
 
 class Login extends React.Component {
+  state = {
+    login:"",
+    password:""
+    
+  } 
+
   render() {
     return (
       <>
@@ -78,26 +94,75 @@ class Login extends React.Component {
               <div className="text-center text-muted mb-4">
                 <small>Or sign in with credentials</small>
               </div>
-              <Form role="form">
+              <Formik
+              initialValues={{ login:"",password:""}}
+                  validationSchema={validationShema}
+                  onSubmit={(values, {setSubmitting }) => {
+                    setTimeout(() => {
+                      alert(JSON.stringify(values, null, 2));
+                      setSubmitting(false);
+                    }, 400);
+                    
+                    console.log(values)
+                    
+                      axios.post('https://jsonplaceholder.typicode.com/users',{values})
+                      .then(res => {
+                        console.log(res)
+                        console.log(res.data)
+                      });
+                  
+                    }
+                   
+
+                  } 
+                >
+                  {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting
+                    /* and other goodies */
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+              
                 <FormGroup className="mb-3">
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-email-83" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Email" type="email" autoComplete="new-email"/>
-                  </InputGroup>
+                 
+                    <Input 
+                     id="login"
+                     placeholder="username"
+                    type="text"
+                    value={values.login}
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
+                    className={
+                      touched.login && errors.login ? "has-error" : null
+                        }/>
+                       <p className="text-danger"><small> <Error
+                          touched={touched.login}
+                          message={errors.login}
+                              /></small></p>
+                 
                 </FormGroup>
                 <FormGroup>
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-lock-circle-open" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Password" type="password" autoComplete="new-password"/>
-                  </InputGroup>
+                
+                    <Input 
+                    id="password" 
+                    placeholder="Password" 
+                    type="password" 
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={
+                    touched.password && errors.password ? "has-error" : null
+                      }/>
+                       <p className="text-danger"><small> <Error
+                          touched={touched.password}
+                          message={errors.password}
+                              /></small></p>
+                  
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
                   <input
@@ -113,11 +178,12 @@ class Login extends React.Component {
                   </label>
                 </div>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="button">
+                  <Button className="my-4" color="primary" type="submit">
                     Sign in
                   </Button>
                 </div>
-              </Form>
+              </form>)}
+              </Formik>
             </CardBody>
           </Card>
           <Row className="mt-3">

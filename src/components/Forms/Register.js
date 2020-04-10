@@ -16,7 +16,10 @@
 
 */
 import React from "react";
-
+import * as Yup from "yup";
+import Error from "./Error";
+import axios from 'axios';
+import { Formik } from "formik";
 // reactstrap components
 import {
   Button,
@@ -32,8 +35,22 @@ import {
   Row,
   Col
 } from "reactstrap";
+const validationShema = Yup.object().shape({
+  username: Yup.string()
+  .required("ne pas eter vide"),
+  email: Yup.string()
+  .email("pas valide")
+  .required("ne pas eter vide"),
+  password: Yup.string()
+  .required("ne pas eter vide"),
+})
 
 class Register extends React.Component {
+  state = {
+    username:"",
+    email:"",
+    password:""
+  }
   render() {
     return (
       <>
@@ -78,36 +95,93 @@ class Register extends React.Component {
               <div className="text-center text-muted mb-4">
                 <small>Or sign up with credentials</small>
               </div>
-              <Form role="form">
+              <Formik
+              initialValues={{ username:"",email:"",password:""}}
+                  validationSchema={validationShema}
+                  onSubmit={(values, {setSubmitting }) => {
+                    setTimeout(() => {
+                      alert(JSON.stringify(values, null, 2));
+                      setSubmitting(false);
+                    }, 400);
+                    
+                    console.log(values)
+                    
+                      axios.post('https://jsonplaceholder.typicode.com/users',{values})
+                      .then(res => {
+                        console.log(res)
+                        console.log(res.data)
+                      });
+                  
+                    }
+                   
+
+                  } 
+                >
+                  {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting
+                    /* and other goodies */
+                  }) => (
+                    <form onSubmit={handleSubmit}>
                 <FormGroup>
-                  <InputGroup className="input-group-alternative mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-hat-3" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Name" type="text" />
-                  </InputGroup>
+                  
+                <Input 
+                     id="username"
+                     placeholder="username"
+                     
+                    type="text"
+                    value={values.username}
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
+                    className={
+                      touched.username && errors.username ? "has-error" : null
+                        }/>
+                       <p className="text-danger"><small> <Error
+                          touched={touched.username}
+                          message={errors.username}
+                              /></small></p>
+                 
                 </FormGroup>
                 <FormGroup>
-                  <InputGroup className="input-group-alternative mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-email-83" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Email" type="email" autoComplete="new-email"/>
-                  </InputGroup>
+                  <i></i>
+                <Input 
+                     id="email"
+                     placeholder="email"
+                    type="text"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
+                    className={
+                      touched.email && errors.email ? "has-error" : null
+                        }/>
+                       <p className="text-danger"><small> <Error
+                          touched={touched.email}
+                          message={errors.email}
+                              /></small></p>
+                  
                 </FormGroup>
                 <FormGroup>
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-lock-circle-open" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Password" type="password" autoComplete="new-password"/>
-                  </InputGroup>
+                  
+                    <Input 
+                     id="password"
+                     placeholder="password"
+                    type="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
+                    className={
+                      touched.password && errors.password? "has-error" : null
+                        }/>
+                       <p className="text-danger"><small> <Error
+                          touched={touched.password}
+                          message={errors.password}
+                              /></small></p>
+                  
                 </FormGroup>
                 <div className="text-muted font-italic">
                   <small>
@@ -138,11 +212,12 @@ class Register extends React.Component {
                   </Col>
                 </Row>
                 <div className="text-center">
-                  <Button className="mt-4" color="primary" type="button">
+                  <Button className="mt-4" color="primary" type="submit">
                     Create account
                   </Button>
                 </div>
-              </Form>
+                </form>)}
+              </Formik>
             </CardBody>
           </Card>
         </Col>

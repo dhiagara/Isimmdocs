@@ -56,9 +56,11 @@ import Services from "components/Services";
 var ps;
 
 class Sidebar extends React.Component {
+  
   state = {
     collapseOpen: false,
   };
+
   constructor(props) {
     super(props);
     this.activeRoute.bind(this);
@@ -82,7 +84,8 @@ class Sidebar extends React.Component {
   // creates the links that appear in the left menu / Sidebar
   createLinks = (routes) => {
     
-    return routes.map((prop, key) => {
+    return routes.map((prop,key) => {
+    
         return (
           <NavItem key={key}>
             <NavLink

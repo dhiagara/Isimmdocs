@@ -17,8 +17,8 @@
 */
 import Index from "views/Index.js";
 import Maps from "views/examples/Maps.js";
-import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
+import Register from "components/Forms/Register.js";
+import Login from "components/Forms/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 
@@ -41,6 +41,20 @@ var routes = [
   //   component: Index,
   //   layout: "/admin"
   // },
+  {
+    path: "/register",
+    name: "Register",
+    icon: "ni ni-circle-08 text-pink",
+    component: Register,
+    layout: "/auth"
+  },
+  {
+    path: "/login",
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: Login,
+    layout: "/auth"
+  },
   {
     path: "/Services",
     name: "Services",
@@ -112,19 +126,7 @@ var routes = [
   //   component: Tables,
   //   layout: "/admin"
   // },
-  // {
-  //   path: "/login",
-  //   name: "Login",
-  //   icon: "ni ni-key-25 text-info",
-  //   component: Login,
-  //   layout: "/auth"
-  // },
-  // {
-  //   path: "/register",
-  //   name: "Register",
-  //   icon: "ni ni-circle-08 text-pink",
-  //   component: Register,
-  //   layout: "/auth"
-  // }
+  
+  //
 ];
 export default routes;
